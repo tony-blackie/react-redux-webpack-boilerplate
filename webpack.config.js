@@ -13,6 +13,7 @@ const extractVendorCss = new ExtractTextPlugin(config.css.vendorBundle)
 module.exports = {
   devServer: {
     open: true,
+    host: config.server.host,
     port: config.server.port,
     contentBase: config.distDir,
     hot: true,
@@ -22,7 +23,6 @@ module.exports = {
   entry: {
     app: config.entry
   },
-  // entry: [config.entry, `webpack-hot-middleware/${config.distDir}`],
   output: {
     path: config.distDir,
     filename: config.js.appBundle,
@@ -46,7 +46,7 @@ module.exports = {
       {
         test: /\.less$/,
         exclude: /node_modules/,
-        loader: extractAppCss.extract('css?-autoprefixer!postcss!less', { publicPath: config.distDir })
+        loader: extractAppCss.extract('css?-autoprefixer!postcss!less')
       },
       {
         test: /\.css$/,
@@ -77,7 +77,7 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
     new CleanWebpackPlugin(config.cleanDirs, {
-      root: path.join(__dirname, config.distDir),
+      root: __dirname,
       verbose: true
     }),
     new webpack.optimize.CommonsChunkPlugin({
@@ -97,9 +97,7 @@ module.exports = {
 function isVendor (module) {
   let userRequest = module.userRequest
 
-  if (typeof userRequest !== 'string') {
-    return false
-  }
-
-  return userRequest.includes('/node_modules/')
+  return typeof userRequest === 'string'
+    ? userRequest.includes('node_modules')
+    : false
 }

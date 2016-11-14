@@ -13,9 +13,11 @@ const extractVendorCss = new ExtractTextPlugin(config.css.vendorBundle)
 module.exports = {
   devServer: {
     open: true,
+    host: config.server.host,
     port: config.server.port,
+    hot: false,
     inline: true,
-    hot: false
+    compress: true
   },
   entry: {
     app: config.entry
@@ -43,11 +45,11 @@ module.exports = {
       {
         test: /\.less$/,
         exclude: /node_modules/,
-        loader: extractAppCss.extract('css?-autoprefixer!postcss!less', { publicPath: config.distDir })
+        loader: extractAppCss.extract('css?autoprefixer&minimize!postcss!less')
       },
       {
         test: /\.css$/,
-        loader: extractVendorCss.extract('css')
+        loader: extractVendorCss.extract('css?minimize')
       },
       {
         test: /\.(eot|ttf|woff|woff2|svg(\?v=\w+))$/,
@@ -56,7 +58,7 @@ module.exports = {
       },
       {
         test: /\.(png|svg)$/,
-        loader: `file?name=${config.statics.images}`
+        loader: `url?limit=${config.statics.urlLimit}&name=${config.statics.images}&outputPath=${config.distDir}`
       }
     ]
   },
@@ -73,7 +75,7 @@ module.exports = {
   plugins: [
     new webpack.NoErrorsPlugin(),
     new CleanWebpackPlugin(config.cleanDirs, {
-      root: path.join(__dirname, config.distDir),
+      root: __dirname,
       verbose: true
     }),
     new webpack.optimize.DedupePlugin(),
@@ -107,9 +109,7 @@ module.exports = {
 function isVendor (module) {
   let userRequest = module.userRequest
 
-  if (typeof userRequest !== 'string') {
-    return false
-  }
-
-  return userRequest.includes('/node_modules/')
+  return typeof userRequest === 'string'
+    ? userRequest.includes('node_modules')
+    : false
 }
