@@ -1,95 +1,110 @@
 {
-  "name": "webpack-react-redux",
-  "version": "1.0.0",
+  "name": "jlr",
+  "version": "1.0.6",
   "description": "Test application",
   "main": "src/app.js",
   "scripts": {
     "preinstall": "npm i webpack less mocha webpack-dev-server eslint -g",
     "start": "npm run production",
-    "production": "npm run lint && npm test && webpack-dev-server --config webpack.production.config.js",
-    "development": "npm run lint && npm test && webpack-dev-server",
+    "production": "npm test && webpack-dev-server --config webpack.production.config.js",
+    "production:build": "npm test && webpack --config webpack.production.config.js",
+    "development": "npm test && webpack-dev-server",
+    "development:build": "npm test && webpack",
     "lint": "eslint src tests",
-    "test": "mocha tests"
+    "test": "mocha tests --require tests/mocha.babel.js"
   },
-  "author": "Artem Droganov",
+  "author": "DataArt",
   "license": "ISC",
   "devDependencies": {
     "autoprefixer": "6.4.0",
     "babel-core": "6.11.4",
-    "babel-eslint": "7.1.0",
+    "babel-eslint": "^7.1.0",
     "babel-loader": "6.2.4",
     "babel-plugin-transform-class-properties": "6.11.5",
     "babel-plugin-transform-es2015-modules-commonjs": "6.14.0",
     "babel-plugin-transform-object-rest-spread": "6.8.0",
     "babel-polyfill": "6.16.0",
     "babel-preset-es2015": "6.9.0",
-    "babel-preset-react": "^6.16.0",
-    "babel-preset-react-hmre": "^1.1.1",
+    "babel-preset-react": "6.16.0",
+    "babel-preset-react-hmre": "1.1.1",
+    "chai": "3.5.0",
     "clean-webpack-plugin": "0.1.10",
     "css-loader": "0.23.1",
+    "enzyme": "2.6.0",
     "eslint": "3.9.1",
-    "eslint-plugin-react": "^6.5.0",
+    "eslint-plugin-react": "6.5.0",
     "extract-text-webpack-plugin": "1.0.1",
     "file-loader": "0.9.0",
     "html-webpack-plugin": "2.22.0",
     "less": "2.7.1",
     "less-loader": "2.2.3",
     "mocha": "3.1.2",
-    "postcss-loader": "^1.1.0",
+    "postcss-loader": "1.1.0",
+    "react-addons-test-utils": "^15.3.2",
     "svgo-loader": "1.1.0",
+    "url-loader": "0.5.7",
     "webpack": "1.13.1",
-    "webpack-hot-middleware": "^2.13.1"
+    "webpack-dev-server": "1.16.2",
+    "webpack-hot-middleware": "2.13.1"
   },
   "dependencies": {
     "normalize.css": "5.0.0",
-    "react": "^15.3.2",
-    "react-dom": "^15.3.2",
-    "react-redux": "^4.4.5",
-    "redux": "^3.6.0"
+    "react": "15.3.2",
+    "react-dom": "15.3.2",
+    "react-redux": "4.4.5",
+    "redux": "3.6.0"
   },
   "config": {
     "development": {
       "server": {
+        "host": "localhost",
         "port": 3000
       },
       "entry": "./src/index.js",
       "htmlEntry": "./src/index.html",
       "publicPath": "/",
-      "distDir": "./dist",
-      "cleanDirs": [],
+      "distDir": "./dist/",
+      "cleanDirs": [
+        "dist"
+      ],
       "js": {
         "appBundle": "js/app.bundle.js?v=[hash]",
         "vendorBundle": "js/vendor.bundle.js?v=[hash]"
       },
       "css": {
-        "appBundle": "css/app.css?v=[hash]",
+        "appBundle": "css/app.bundle.css?v=[hash]",
         "vendorBundle": "css/vendor.bundle.css?v=[hash]"
       },
       "statics": {
         "fonts": "fonts/[name].[ext]",
-        "images": "images/[name].[ext]?v=[hash]"
+        "images": "images/[name].[ext]?v=[hash]",
+        "urlLimit": 10000
       }
     },
     "production": {
       "server": {
+        "host": "localhost",
         "port": 3000
       },
       "entry": "./src/index.js",
       "htmlEntry": "./src/index.html",
       "publicPath": "/",
       "distDir": "./dist",
-      "cleanDirs": [],
+      "cleanDirs": [
+        "dist"
+      ],
       "js": {
         "appBundle": "js/app.bundle.js?v=[hash]",
         "vendorBundle": "js/vendor.bundle.js?v=[hash]"
       },
       "css": {
-        "appBundle": "css/app.css?v=[hash]",
+        "appBundle": "css/app.bundle.css?v=[hash]",
         "vendorBundle": "css/vendor.bundle.css?v=[hash]"
       },
       "statics": {
         "fonts": "fonts/[name].[ext]",
-        "images": "images/[name].[ext]?v=[hash]"
+        "images": "images/[name].[ext]?v=[hash]",
+        "urlLimit": 10000
       }
     }
   }
